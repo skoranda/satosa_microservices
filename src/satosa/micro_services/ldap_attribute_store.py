@@ -327,5 +327,5 @@ class LdapAttributeStore(satosa.micro_services.base.ResponseMicroService):
                 satosa_logging(logger, logging.INFO, "{} Redirecting to {}".format(logprefix, url), context.state)
                 return Redirect(url)
 
-        satosa_logging(logger, logging.DEBUG, "{} returning data.attributes {}".format(logprefix, str(data.attributes)), context.state)
+        satosa_logging(logger, logging.INFO, "{} returning data.attributes {}".format(logprefix, str(data.attributes)), context.state)
         return super().process(context, data)
