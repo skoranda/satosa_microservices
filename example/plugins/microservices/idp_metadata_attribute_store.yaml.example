@@ -1,0 +1,29 @@
+module: idp_metadata_attribute_store.IdpMetadataAttributeStore
+name: IdpMetadataAttributeStore
+config:
+  default:
+      display_name:
+          # SATOSA internal attribute name to use
+          internal_attribute_name: idpdisplayname
+          # Language preference. 'en' or English is the default
+          # if not specified.
+          lang: en
+      organization_name:
+          internal_attribute_name: idporgname
+      organization_display_name:
+          internal_attribute_name: idporgdisplayname
+          
+  # Configuration may also be done per-IdP with any
+  # missing parameters taken from the default if any.
+  # The configuration key is the entityID of the IdP.
+  #
+  # For example:
+  https://idp.myorg.edu/idp/shibboleth:
+      display_name:
+          internal_attribute_name: othername
+          lang: jp
+  # The microservice may be configured to ignore a particular IdP.
+  https://login.other.org.edu/idp/shibboleth:
+    ignore: true
+
+  
