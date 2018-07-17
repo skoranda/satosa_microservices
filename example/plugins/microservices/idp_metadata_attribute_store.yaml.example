@@ -8,6 +8,8 @@ config:
           # Language preference. 'en' or English is the default
           # if not specified.
           lang: en
+      entity_id:
+          internal_attribute_name: idpentityid
       organization_name:
           internal_attribute_name: idporgname
       organization_display_name:

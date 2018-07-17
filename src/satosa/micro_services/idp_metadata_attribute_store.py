@@ -21,6 +21,8 @@ config:
           internal_attribute_name: idpdisplayname
           # Language preference with 'en' or English as default
           lang: en
+      entity_id:
+          internal_attribute_name: idpentityid
       organization_name:
           internal_attribute_name: idporgname
           lang: en
@@ -45,6 +47,7 @@ config:
 import satosa.micro_services.base
 from satosa.logging_util import satosa_logging
 from satosa.exception import SATOSAError
+from satosa.context import Context
 
 import copy
 import logging
@@ -159,15 +162,22 @@ class IdpMetadataAttributeStore(satosa.micro_services.base.ResponseMicroService)
 
         satosa_logging(logger, logging.DEBUG, "Using config {}".format(config), context.state)
 
+        # Log the entityID of the authenticating IdP.
+        satosa_logging(logger, logging.INFO, "entityID for authenticating IdP is {}".format(idp_entity_id), context.state)
+
         # Ignore this IdP if so configured.
         if config['ignore']:
             satosa_logging(logger, logging.INFO, "Ignoring IdP {}".format(idp_entity_id), context.state)
             return super().process(context, data)
 
+        # Set the entityID attribute if so configured.
+        if 'entity_id' in config:
+            data.attributes[config['entity_id']['internal_attribute_name']] = idp_entity_id
+
         # Get the metadata store the SP for the proxy is using. This
         # will be an instance of the class MetadataStore from mdstore.py
         # in pysaml2.
-        metadata_store = context.internal_data['metadata_store']
+        metadata_store = context.get_decoration(Context.KEY_BACKEND_METADATA_STORE)
 
         # Get the metadata for the IdP.
         try:
